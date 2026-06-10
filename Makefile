@@ -140,7 +140,7 @@ UPROGS=\
 	$U/_xargs\
 	$U/_find\
 	$U/_findx\
-	$U/_proctest\
+	$U/_pstest\
 	$U/_sh\
 	$U/_stressfs\
 	$U/_usertests\

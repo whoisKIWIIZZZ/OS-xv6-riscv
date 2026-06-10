@@ -22,11 +22,10 @@ VSCode无法直接给用户态代码打断点.需要在`DEBUG CONSOLE`里写上
 
 `syscall.c,syscall.h,sysproc.c`(`./kernel`),
 
-`proctest.c,user.h,usys.pl`(`./user`)
+`pstest.c,user.h,usys.pl`(`./user`)
 
 # Acknowledge
 thx [Zoomy]("https://github.com/zoomy14112")
 
 thx [Larry]("https://github.com/Larryyyyyyy")
-
 
