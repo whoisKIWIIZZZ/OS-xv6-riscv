@@ -1,14 +1,14 @@
 #include "kernel/types.h"
 #include "user/user.h"
 
-#define NBUSY 4
-#define NSLEEP 2
+int busy = 1;
+int sl = 2;
 
 int
 main(int argc, char *argv[])
 {
   int state, test_mode, i, pid;
-  int busy_pid[NBUSY];
+  int busy_pid[busy];
   int nchild;
 
   state = 0;
@@ -20,42 +20,42 @@ main(int argc, char *argv[])
     else
       state = atoi(argv[1]);
   }
-
+  else{
+    printf("usage:pstest [123]\n");
+    exit(-1);
+  }
   if(test_mode){
-    nchild = NSLEEP + NBUSY;
+    nchild = sl+busy;
 
-    // 1. basline
-    printf("=== basline ===\n");
+  
+    printf("=== baseline ===\n");
     printf("Running:  %d\n", getprocn(1));
     printf("Runnable: %d\n", getprocn(2));
     printf("Sleeping: %d\n", getprocn(3));
 
-    // 2. create SLEEPING children
-    for(i = 0; i < NSLEEP; i++){
+
+    for(i = 0; i < sl; i++){
       if(fork() == 0){
         sleep(50);
         exit(0);
       }
     }
 
-    // 3. create busy-loop children (will be RUNNABLE or RUNNING)
-    for(i = 0; i < NBUSY; i++){
+    for(i = 0; i < busy; i++){
       pid = fork();
       if(pid == 0){
-        while(1);  // busy-loop, parent will kill it
+        while(1);  
       }
       busy_pid[i] = pid;
     }
 
-    // 4. let states settle then snapshot
     sleep(5);
-    printf("=== with test processes ===\n");
+    printf("=== with test processes:4 while loop, 2 sleep loop ===\n");
     printf("Running:  %d\n", getprocn(1));
     printf("Runnable: %d\n", getprocn(2));
     printf("Sleeping: %d\n", getprocn(3));
 
-    // 5. kill busy-loop children
-    for(i = 0; i < NBUSY; i++)
+    for(i = 0; i < busy; i++)
       kill(busy_pid[i]);
 
     // 6. wait for all children to exit
@@ -71,7 +71,7 @@ main(int argc, char *argv[])
     exit(0);
   }
 
-  // normal mode: query states
+  // normal
   if(state == 0 || state == 1)
     printf("Running:  %d\n", getprocn(1));
   if(state == 0 || state == 2)

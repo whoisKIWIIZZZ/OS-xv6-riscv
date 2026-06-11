@@ -93,34 +93,32 @@ sys_uptime(void)
 }
 
 
-// 在 kernel/sysproc.c 中
-extern struct proc proc[NPROC]; // 声明外部进程表
+
+extern struct proc proc[NPROC]; 
 
 uint64
 sys_getprocn(void)
 {
   int n;
   int count = 0;
-  
-  // 1. 获取用户传入的第一个整型参数
+
   argint(0, &n);
 
-  // 2. 将参数映射为内核中的进程状态常量
+  
   enum procstate target_state;
   if(n == 1) target_state = RUNNING;
   else if(n == 2) target_state = RUNNABLE;
   else if(n == 3) target_state = SLEEPING;
   else return -1;
 
-  // 3. 遍历进程表进行计数
   struct proc *p;
   for(p = proc; p < &proc[NPROC]; p++){
-    acquire(&p->lock); // 必须加锁以保证读取状态时的一致性
+    acquire(&p->lock);
     if(p->state == target_state) {
       count++;
     }
     release(&p->lock);
   }
 
-  return count; // 返回值会自动放入 a0
+  return count; 
 }
