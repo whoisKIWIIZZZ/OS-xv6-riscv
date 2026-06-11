@@ -58,11 +58,9 @@ main(int argc, char *argv[])
     for(i = 0; i < busy; i++)
       kill(busy_pid[i]);
 
-    // 6. wait for all children to exit
     for(i = 0; i < nchild; i++)
       wait(0);
 
-    // 7. final snapshot
     printf("=== after cleanup ===\n");
     printf("Running:  %d\n", getprocn(1));
     printf("Runnable: %d\n", getprocn(2));

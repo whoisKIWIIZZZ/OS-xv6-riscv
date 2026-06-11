@@ -112,7 +112,7 @@ sys_getprocn(void)
   else return -1;
 
   struct proc *p;
-  for(p = proc; p < &proc[NPROC]; p++){
+  for(p = proc; p<&proc[NPROC]; p++){
     acquire(&p->lock);
     if(p->state == target_state) {
       count++;
